@@ -1,7 +1,7 @@
 package ma.nemo.assignment.repository;
 
 import jakarta.transaction.Transactional;
-import ma.nemo.assignment.domain.Product;
+import ma.nemo.assignment.domain.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -11,7 +11,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.Date;
 import java.util.List;
 
@@ -22,6 +21,18 @@ public class TransferRepositoryTest {
 
   @Autowired
   private ProductRepository productRepository;
+
+  @Autowired
+  private SupplyRepository supplyRepository;
+
+  @Autowired
+  private SaleRepository saleRepository;
+
+  @Autowired
+  private ReturnRapository returnRapository;
+
+  @Autowired
+  private ThresholdRepository thresholdRepository;
 
   @Test
   public void ProductRepository_GetAll_ReturnMoreThanOneProduct(){
@@ -46,20 +57,62 @@ public class TransferRepositoryTest {
   }
 
   @Test
-  public void findOne() {
+  public void saveSupplyRepositoryTest() {
+    Supply supply = new Supply();
+    supply.setQuantity(200);
+
+    Supply savedSupply = supplyRepository.save(supply);
+
+    Assertions.assertEquals(31,savedSupply.getSupplyId());
   }
 
   @Test
-  public void findAll() {
+  public void saveSaleRepositoryTest() {
+    Sale sale = new Sale();
 
+    Sale savedSale = saleRepository.save(sale);
+
+    Assertions.assertEquals(9,savedSale.getSaleId());
   }
 
   @Test
-  public void save() {
+  public void saveReturnRepositoryTest() {
+    Return retrn = new Return();
+
+    Return savedReturn = returnRapository.save(retrn);
+
+    Assertions.assertEquals(7,savedReturn.getReturnId());
   }
 
   @Test
-  public void delete() {
+  public void testFindExpiryAlerts() {
+    Product product1 = new Product();
+    product1.setProductCode("E001");
+    product1.setProductName("prd1");
+    product1.setQuantityInStock(100);
+    product1.setExpirationDate(new Date());
+
+
+    Product product2 = new Product();
+    product2.setProductCode("E002");
+    product2.setProductName("prd2");
+    product2.setQuantityInStock(100);
+    product2.setExpirationDate(new Date(System.currentTimeMillis() + 2 * 86400000));
+
+    productRepository.save(product1);
+    productRepository.save(product2);
+
+    Date currentDate = new Date();
+    Date expirationLimit = new Date(currentDate.getTime() + 5 * 86400000);
+    List<Product> expiryAlerts = productRepository.findExpiryAlerts(currentDate, expirationLimit);
+
+    Assertions.assertEquals(2, expiryAlerts.size());
+  }
+
+  @Test
+  public void findAllThresholdRepository(){
+    List<Threshold> thresholds = thresholdRepository.findAll();
+    Assertions.assertEquals(2,thresholds.size());
   }
 }
 

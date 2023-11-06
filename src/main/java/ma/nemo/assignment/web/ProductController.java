@@ -119,5 +119,10 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/test")
+    ResponseEntity<String> test(){
+        return new ResponseEntity<>("toto", HttpStatus.OK);
+    }
+
 }
 

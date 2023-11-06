@@ -32,7 +32,6 @@ public class ReturnController {
 
         if (produit == null) {
             throw new ProductNotFound("Le produit n'existe pas.");
-
         }
 
         int newQuantityInStock = produit.getQuantityInStock() + returnDto.getQuantity();
