@@ -14,23 +14,23 @@ import org.springframework.web.context.request.WebRequest;
 public class ExceptionHandlingController {
 
     @ExceptionHandler(ProductNotFound.class)
-    public ResponseEntity<String> handleSoldeDisponibleInsuffisantException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("Produit non existant", null, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    public ResponseEntity<String> handleSoldeDisponibleInsuffisantException(ProductNotFound ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), null, HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(ProductAlreadyExists.class)
-    public ResponseEntity<String> handleCompteNonExistantException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("Produit existe déjà", null, HttpStatus.UNAUTHORIZED);
+    public ResponseEntity<String> handleCompteNonExistantException(ProductAlreadyExists ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), null, HttpStatus.CONFLICT);
     }
 
     @ExceptionHandler(ProductValidationException.class)
-    public ResponseEntity<String> handleProductValidationException(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("Validation du produit échouée", null, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    public ResponseEntity<String> handleProductValidationException(ProductValidationException ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), null, HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(UserNotFound.class)
-    public ResponseEntity<String> handleUserNotFound(Exception ex, WebRequest request) {
-        return new ResponseEntity<>("Validation du user échouée", null, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
+    public ResponseEntity<String> handleUserNotFound(UserNotFound ex, WebRequest request) {
+        return new ResponseEntity<>(ex.getMessage(), null, HttpStatus.UNAVAILABLE_FOR_LEGAL_REASONS);
     }
 
 

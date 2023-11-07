@@ -45,7 +45,7 @@ public class ProductController {
 
         if (p != null) {
             System.out.printf("Product with code %s already exists", prd.getProductCode());
-            throw new ProductAlreadyExists();
+            throw new ProductAlreadyExists("Product with this code : "+prd.getProductCode()+" , already exists");
         }
 
         if (prd.getProductCode().equals(null)) {
